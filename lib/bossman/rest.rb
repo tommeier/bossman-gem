@@ -9,7 +9,7 @@ module BOSSMan
       uri = URI.parse(URI.encode("#{API_BASEURI}/#{method}/#{API_VERSION}/#{query}"))
       uri.query = options.to_query
       request = Net::HTTP::Get.new(uri.request_uri)
-      response = Net::HTTP.new(uri.host).request(request)
+      response = BOSSMan.proxy_host ? Net::HTTP::Proxy(BOSSMan.proxy_host, BOSSMan.proxy_port, BOSSMan.proxy_user, BOSSMan.proxy_pass).start(uri.host).request(request) : Net::HTTP.new(uri.host).request(request)
 
       case response
         when Net::HTTPSuccess
